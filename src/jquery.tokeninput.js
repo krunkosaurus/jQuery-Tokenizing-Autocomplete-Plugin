@@ -23,7 +23,9 @@ $.fn.tokenInput = function (url, options) {
         method: "GET",
         contentType: "json",
         queryParam: "q",
-        onResult: null
+        onResult: null,
+				onAdd: null,
+				onDelete: null
     }, options);
 
     settings.classes = $.extend({
@@ -333,6 +335,7 @@ $.TokenList = function (input, settings) {
     function add_token (item) {
         var li_data = $.data(item.get(0), "tokeninput");
         var this_token = insert_token(li_data.id, li_data.name);
+				var callback = settings.onAdd;
 
         // Clear input box and make sure it keeps focus
         input_box
@@ -352,6 +355,11 @@ $.TokenList = function (input, settings) {
             input_box.hide();
             hide_dropdown();
         }
+				
+				// Execute the onAdd callback if defined
+				if($.isFunction(callback)) {
+				  callback(li_data.id);
+				}
     }
 
     // Select a token in the token list
@@ -399,6 +407,7 @@ $.TokenList = function (input, settings) {
     function delete_token (token) {
         // Remove the id from the saved list
         var token_data = $.data(token.get(0), "tokeninput");
+				var callback = settings.onDelete;
 
         // Delete the token
         token.remove();
@@ -426,6 +435,11 @@ $.TokenList = function (input, settings) {
                 .val("")
                 .focus();
         }
+				
+				// Execute the onDelete callback if defined
+				if($.isFunction(callback)) {
+				  callback(token_data.id);
+				}
     }
 
     // Hide and clear the results dropdown
