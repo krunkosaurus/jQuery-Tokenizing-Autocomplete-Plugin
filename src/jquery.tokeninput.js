@@ -20,6 +20,8 @@ $.fn.tokenInput = function (url, options) {
         minChars: 1,
         tokenLimit: null,
         jsonContainer: null,
+        jsonName: 'name',
+        jsonId: 'id',
         method: "GET",
         contentType: "json",
         queryParam: "q",
@@ -453,7 +455,7 @@ $.TokenList = function (input, settings) {
 
     // Populate the results dropdown with some results
     function populate_dropdown (query, results) {
-        if(results.length) {
+        if(results && results.length) {
             dropdown.empty();
             var dropdown_ul = $("<ul>")
                 .appendTo(dropdown)
@@ -481,7 +483,7 @@ $.TokenList = function (input, settings) {
                         select_dropdown_item(this_li);
                     }
 
-                    $.data(this_li.get(0), "tokeninput", {"id": results[i].id, "name": results[i].name});
+                    $.data(this_li.get(0), "tokeninput", {"id": results[i][settings.jsonId], "name": results[i][settings.jsonName]});
                 }
             }
 
